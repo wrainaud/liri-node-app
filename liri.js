@@ -3,10 +3,32 @@
 // Homework 8 - Liri Node App
 
 var request = require("request");
+var fs = require("fs");
+var moment = require("moment");
+
+// Declare Variables
+
 
 
 // Twitter Function
+function myTweets (search) {
 
+  // Twitter Keys / NPM Modules
+  var twitterKey = require("./keys.js");
+  var twitter = require("twitter");
+  var client = new twitter (twitterKey);
+
+  // Get Past 20 Tweets from Twitter
+  client.get('statuses/user_timeline', search, function (error, tweets, response){
+    if (!error) {
+      for (i = 0; i < tweets.length; i += 1) {
+        console.log("Tweeter: " + tweets[i].user.screen_name + '\n');
+        console.log("Tweeted Date: " + tweets[i].created_at + '\n');
+        console.log("Tweet: " + tweets[i].text + '\n');
+      }
+    }
+  });
+}
 
 
 // Spotify Function
