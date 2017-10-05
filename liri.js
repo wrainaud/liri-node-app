@@ -8,6 +8,7 @@ var fs = require("fs");
 var llaves = require("nuevo-llaves-rcbc");
 var twitter = require("twitter");
 var Spotify = require("node-spotify-api");
+var inquirer = require("inquirer");
 var command = process.argv[2];
 var movie;
 var songName;
@@ -36,12 +37,20 @@ function spotifySong(songName) {
 
   var spotify = new Spotify (llaves.spotifyKey);
 
-  spotify.search({ type: 'track', query: songName }, function(err, data) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
-    }
-    
-  console.log(data); 
+  if (songName === "" || songName === undefined){
+    songName = "Lower Your Eyelids To Die With The Sun";
+  }
+  spotify.search({ type: 'track', query: songName }, function(error, data) {
+    if (error) {
+      return console.log('Error occurred: ' + error);
+    } else {
+			console.log("\n==============================================\n");
+			console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
+			console.log("Song: " + data.tracks.items[0].name);
+			console.log("Preview: " + data.tracks.items[0].preview_url);
+			console.log("Album: " + data.tracks.items[0].album.name);
+			console.log("\n==============================================\n");
+		} 
   });
 
 }
@@ -86,25 +95,67 @@ function randomFunction() {
 };
 
 //Switch statement to run above functions
-switch(command) {
+// switch(command) {
 	
-	case "my-tweets":
-	myTweets();
-	break;
+// 	case "my-tweets":
+// 	myTweets();
+// 	break;
 
-	case "spotify-this-song":
-	spotifySong(songName);
-	break;
+// 	case "spotify-this-song":
+// 	spotifySong(songName);
+// 	break;
 
-	case "movie-this":
-	movieThis(movie);
-	break;
+// 	case "movie-this":
+// 	movieThis(movie);
+// 	break;
 
-	case "do-what-it-says":
-	randomFunction();
-	break;
+// 	case "do-what-it-says":
+// 	randomFunction();
+// 	break;
 
-	default:
-	console.log("Not a valid request.");
-	break;
-};
+// 	default:
+// 	console.log("Not a valid request.");
+// 	break;
+// };
+
+inquirer.prompt([
+  // Here we create a basic text prompt.
+  {
+    type: "input",
+    message: "Welcome to Liri! \n  It’s a blessing just to be here - Everything 1K! \n  What is your name?\n",
+    name: "username"
+  },
+
+  // Here we give the user a list to choose from.
+  {
+    type: "list",
+    message: "Which function do you want to run?",
+    choices: ["my-tweets", "spotify-this-song", "movie-this", "do-what-it-says"],
+    name: "command"
+  },
+]).then(function(response) {
+  // If the inquirerResponse confirms, we displays the inquirerResponse's username and pokemon from the answers.
+  if (response.command === "my-tweets") {
+    console.log("\nWelcome " + response.username);
+    myTweets();
+  }
+  if (response.command === "spotify-this-song") {
+    console.log("\nWelcome " + response.username);
+    new inquirer.prompt([{ type: "input", message: "Please enter a song name\n", name: "songName"}])
+            .then(function(userResponse){
+              spotifySong(userResponse.songName);
+            })
+  }
+  if (response.command === "movie-this") {
+    console.log("\nWelcome " + response.username);
+    new inquirer.prompt([{ type: "input", message: "Please enter a Movie title\n", name: "movie"}])
+    .then(function(userInput){
+      movieThis(userInput.movie);
+    })
+  }
+  if (response.command === "do-what-it-says") {
+    console.log("\nWelcome " + response.username);
+    randomFunction();
+  }
+});
+
