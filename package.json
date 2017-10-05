@@ -18,8 +18,13 @@
   },
   "homepage": "https://github.com/wrainaud/liri-node-app#readme",
   "dependencies": {
+    "fs": "0.0.1-security",
+    "inquirer": "^3.3.0",
+    "moment": "^2.18.1",
     "node-spotify-api": "^1.0.7",
+    "nuevo-llaves-rcbc": "^1.3.0",
     "request": "^2.83.0",
-    "require": "^2.4.20"
+    "require": "^2.4.20",
+    "twitter": "^1.7.1"
   }
 }

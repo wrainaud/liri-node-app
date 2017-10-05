@@ -2,47 +2,55 @@
 // Rutgers Coding Bootcamp 
 // Homework 8 - Liri Node App
 
+// NPM Modules / Package dependencies
 var request = require("request");
 var fs = require("fs");
-var moment = require("moment");
-
-// Declare Variables
-
-
+var llaves = require("nuevo-llaves-rcbc");
+var twitter = require("twitter");
+var Spotify = require("node-spotify-api");
+var command = process.argv[2];
+var movie;
+var songName;
 
 // Twitter Function
 function myTweets (search) {
 
-  // Twitter Keys / NPM Modules
-  var twitterKey = require("./keys.js");
-  var twitter = require("twitter");
-  var client = new twitter (twitterKey);
+  var client = new twitter (llaves.twitterKey);
 
   // Get Past 20 Tweets from Twitter
-  client.get('statuses/user_timeline', search, function (error, tweets, response){
+  client.get('statuses/user_timeline', llaves.twitterParams, function (error, tweets, response){
     if (!error) {
       for (i = 0; i < tweets.length; i += 1) {
+        console.log("\n==============================================\n");
         console.log("Tweeter: " + tweets[i].user.screen_name + '\n');
         console.log("Tweeted Date: " + tweets[i].created_at + '\n');
         console.log("Tweet: " + tweets[i].text + '\n');
+        console.log("\n==============================================\n");
       }
     }
   });
 }
 
-
 // Spotify Function
+function spotifySong(songName) {
 
+  var spotify = new Spotify (llaves.spotifyKey);
 
+  spotify.search({ type: 'track', query: songName }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+    
+  console.log(data); 
+  });
+
+}
 
 
 // OMDB Function
-function movieThis (movie) {
+function movieThis(movie) {
     "use strict";
-    // NPM Package dependencies
-    var request = require('request');
-
-    request("http://www.omdbapi.com/?t=" + arg3 + "&y=&plot=short&apikey=40e9cece", function(error, response, body) {
+    request("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=40e9cece", function(error, response, body) {
         if (!error && response.statusCode === 200) {
   
           var movieInfo = JSON.parse(body);
@@ -65,10 +73,38 @@ function movieThis (movie) {
   
         }
       });
-    }
-
-}
+  }
 
 
 
 // fs Function
+function randomFunction() {
+	fs.readFile("./random.txt", "utf8", function(err, data) {
+		if (err) throw err;
+		console.log(data);
+	});
+};
+
+//Switch statement to run above functions
+switch(command) {
+	
+	case "my-tweets":
+	myTweets();
+	break;
+
+	case "spotify-this-song":
+	spotifySong(songName);
+	break;
+
+	case "movie-this":
+	movieThis(movie);
+	break;
+
+	case "do-what-it-says":
+	randomFunction();
+	break;
+
+	default:
+	console.log("Not a valid request.");
+	break;
+};
