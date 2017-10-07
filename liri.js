@@ -53,6 +53,7 @@ function spotifySong(songName) {
 		} 
   });
 
+
 }
 
 
@@ -93,30 +94,6 @@ function randomFunction() {
 		console.log(data);
 	});
 };
-
-//Switch statement to run above functions
-// switch(command) {
-	
-// 	case "my-tweets":
-// 	myTweets();
-// 	break;
-
-// 	case "spotify-this-song":
-// 	spotifySong(songName);
-// 	break;
-
-// 	case "movie-this":
-// 	movieThis(movie);
-// 	break;
-
-// 	case "do-what-it-says":
-// 	randomFunction();
-// 	break;
-
-// 	default:
-// 	console.log("Not a valid request.");
-// 	break;
-// };
 
 inquirer.prompt([
   // Here we create a basic text prompt.
