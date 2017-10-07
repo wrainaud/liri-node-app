@@ -35,7 +35,10 @@ function myTweets (search) {
 // Spotify Function
 function spotifySong(songName) {
 
-  var spotify = new Spotify (llaves.spotifyKey);
+  var spotify = new Spotify ({
+    id: 'e86ba3ac46304c978ce47ea41f7814ac',
+    secret: '7d97f4b30e8342949afe76e7cf4cb079',
+  });
 
   if (songName === "" || songName === undefined){
     songName = "Lower Your Eyelids To Die With The Sun";
